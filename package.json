@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.5",
+    "mongoose": "^5.12.3",
+    "nodemon": "^2.0.7"
+  },
+  "name": "collection-api",
+  "description": "api for manageing my collection",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShaneButtCodeNL/collection-api.git"
+  },
+  "author": "Shane Butt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShaneButtCodeNL/collection-api/issues"
+  },
+  "homepage": "https://github.com/ShaneButtCodeNL/collection-api#readme"
+}
