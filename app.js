@@ -12,6 +12,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Routing
+const mangaRoutes = require("./routes/manga");
+const VideoGameRoutes = require("./routes/videoGame");
+
+app.use("/manga", mangaRoutes);
+app.use("/videogame", VideoGameRoutes);
+
 app.get("/", (req, res) => {
   res.send("We are at home");
 });
