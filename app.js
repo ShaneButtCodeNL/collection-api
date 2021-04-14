@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 require("dotenv/config");
 
 const app = express();
+mongoose.set("useFindAndModify", false);
 
 //Handle parseing body
 app.use(express.urlencoded({ extended: true }));
@@ -17,10 +18,6 @@ const VideoGameRoutes = require("./routes/videoGame");
 
 app.use("/manga", mangaRoutes);
 app.use("/videogame", VideoGameRoutes);
-
-app.get("/", (req, res) => {
-  res.send("We are at home");
-});
 
 mongoose.connect(
   process.env.DB_CONNECTION,
