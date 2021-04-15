@@ -77,7 +77,7 @@ router.delete("/:VGId", async (req, res) => {
 router.patch("/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
-    { $set: { details: req.body } },
+    { $set: req.body ? { details: new VideoGame(req.body) } : {} },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);

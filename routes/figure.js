@@ -92,7 +92,7 @@ router.delete("/:FigId", async (req, res) => {
 router.patch("/:FigId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.FigId },
-    { $set: { details: req.body } },
+    { $set: req.body ? { details: new Figure(req.body) } : {} },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);

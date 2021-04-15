@@ -11,6 +11,8 @@ const VideoGameScheme = mongoose.Schema(
     genres: { type: Array, required: true },
     //Is sealed
     sealed: Boolean,
+    //Has case for game
+    hasCase: { type: Boolean, default: true },
   },
   { _id: false }
 );

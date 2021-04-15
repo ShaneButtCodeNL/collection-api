@@ -9,9 +9,11 @@ const Manga = require("../models/Manga");
 //Get all items
 router.get("/", async (req, res) => {
   try {
-    const mangas = await Item.find();
+    const items = await Item.find();
     res.json(items);
   } catch (err) {
     res.json(err);
   }
 });
+
+module.exports = router;
