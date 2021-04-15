@@ -140,17 +140,18 @@ router.patch("/condition/:VGId", async (req, res) => {
 
 //
 //Update release date
+//Date will be stored as a string "month day year"
 //
-/*********************************
- * TODO:
- * fix so it doesnt show time
- **********************************/
 router.patch("/releasedate/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
     {
       $set: req.body.releaseDate
-        ? { "details.releaseDate": new Date(req.body.releaseDate) }
+        ? {
+            "details.releaseDate": new Date(req.body.releaseDate)
+              .toDateString()
+              .substr(4),
+          }
         : {},
     },
     { new: true },
@@ -179,7 +180,7 @@ router.patch("/genre/:VGId", async (req, res) => {
 });
 
 //
-//Update genre
+//Update if is sealed
 //
 router.patch("/sealed/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(

@@ -15,9 +15,11 @@ app.use(express.json());
 //Routing
 const mangaRoutes = require("./routes/manga");
 const VideoGameRoutes = require("./routes/videoGame");
+const FigureRoutes = require("./routes/figure");
 
 app.use("/manga", mangaRoutes);
 app.use("/videogame", VideoGameRoutes);
+app.use("/figure", FigureRoutes);
 
 mongoose.connect(
   process.env.DB_CONNECTION,

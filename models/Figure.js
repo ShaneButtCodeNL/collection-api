@@ -12,6 +12,8 @@ const FigureScheme = mongoose.Schema(
     type: String,
     //Is Sealed
     sealed: Boolean,
+    //Is from a series
+    series: String,
   },
   { _id: false }
 );

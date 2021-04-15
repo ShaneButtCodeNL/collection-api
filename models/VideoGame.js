@@ -6,7 +6,7 @@ const VideoGameScheme = mongoose.Schema(
     platform: { type: String, required: true },
     publisher: String,
     condition: String,
-    releaseDate: Date,
+    releaseDate: String,
     //Genres of the game such as RPG, Adventure, Fighting ect
     genres: { type: Array, required: true },
     //Is sealed
