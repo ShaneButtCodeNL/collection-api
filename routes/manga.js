@@ -70,14 +70,12 @@ router.get("/publisher/:pubName", async (req, res) => {
 //add Manga
 //
 router.post("/", async (req, res) => {
-  const manga = new Manga({
-    name: req.body.name,
-    volume: req.body.volume,
-    publisher: req.body.publisher,
-    author: req.body.author,
-    condition: req.body.condition,
+  const manga = new Manga(req.body.details);
+  const item = new Item({
+    type: "Manga",
+    imgPath: req.body.imgPath,
+    details: manga,
   });
-  const item = new Item({ type: "Manga", details: manga });
   try {
     const savedItem = await item.save();
     res.json(savedItem);
@@ -118,7 +116,7 @@ router.delete("/:mangaId", async (req, res) => {
 router.patch("/:MangaId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.MangaId },
-    { $set: req.body ? { details: new Manga(req.body) } : {} },
+    { $set: req.body.details ? { details: new Manga(req.body.details) } : {} },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);
@@ -133,7 +131,11 @@ router.patch("/:MangaId", async (req, res) => {
 router.patch("/name/:MangaId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.MangaId },
-    { $set: req.body.name ? { "details.name": req.body.name } : {} },
+    {
+      $set: req.body.details.name
+        ? { "details.name": req.body.details.name }
+        : {},
+    },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);
@@ -149,8 +151,8 @@ router.patch("/publisher/:MangaId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.MangaId },
     {
-      $set: req.body.publisher
-        ? { "details.publisher": req.body.publisher }
+      $set: req.body.details.publisher
+        ? { "details.publisher": req.body.details.publisher }
         : {},
     },
     { new: true },
@@ -168,8 +170,8 @@ router.patch("/condition/:MangaId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.MangaId },
     {
-      $set: req.body.condition
-        ? { "details.condition": req.body.condition }
+      $set: req.body.details.condition
+        ? { "details.condition": req.body.details.condition }
         : {},
     },
     { new: true },
@@ -187,7 +189,23 @@ router.patch("/author/:MangaId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.MangaId },
     {
-      $set: req.body.author ? { "details.author": req.body.author } : {},
+      $set: req.body.details.author
+        ? { "details.author": req.body.details.author }
+        : {},
+    },
+    { new: true },
+    (err, doc) => {
+      if (err) res.json(err);
+      res.json(doc);
+    }
+  );
+});
+
+router.patch("url/:MangaId", async (req, res) => {
+  await Item.findOneAndUpdate(
+    { _id: req.params.MangaId },
+    {
+      $set: req.body.imgPath ? { imgPath: req.body.imgPath } : {},
     },
     { new: true },
     (err, doc) => {

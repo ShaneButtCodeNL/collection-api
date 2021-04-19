@@ -8,6 +8,7 @@ const Manga = require("../models/Manga");
 //Routeing
 //Get all items
 router.get("/", async (req, res) => {
+  console.log("Fetching items");
   try {
     const items = await Item.find();
     res.json(items);

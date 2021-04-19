@@ -43,8 +43,12 @@ router.get("/:VGId", async (req, res) => {
  *                              *
  *********************************/
 router.post("/", async (req, res) => {
-  const VG = new VideoGame(req.body);
-  const item = new Item({ type: "VideoGame", details: VG });
+  const VG = new VideoGame(req.body.details);
+  const item = new Item({
+    type: "VideoGame",
+    imgPath: req.body.imgPath,
+    details: VG,
+  });
   try {
     const savedItem = await item.save();
     res.json(savedItem);
@@ -77,7 +81,11 @@ router.delete("/:VGId", async (req, res) => {
 router.patch("/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
-    { $set: req.body ? { details: new VideoGame(req.body) } : {} },
+    {
+      $set: req.body.details
+        ? { details: new VideoGame(req.body.details) }
+        : {},
+    },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);
@@ -92,7 +100,11 @@ router.patch("/:VGId", async (req, res) => {
 router.patch("/name/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
-    { $set: req.body.name ? { "details.name": req.body.name } : {} },
+    {
+      $set: req.body.details.name
+        ? { "details.name": req.body.details.name }
+        : {},
+    },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);
@@ -108,7 +120,9 @@ router.patch("/platform/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
     {
-      $set: req.body.platform ? { "details.platform": req.body.platform } : {},
+      $set: req.body.details.platform
+        ? { "details.platform": req.body.details.platform }
+        : {},
     },
     { new: true },
     (err, doc) => {
@@ -126,8 +140,8 @@ router.patch("/condition/:VGId", async (req, res) => {
     { _id: req.params.VGId },
     {
       $set:
-        req.body.condition !== null
-          ? { "details.condition": req.body.condition }
+        req.body.details.condition !== null
+          ? { "details.condition": req.body.details.condition }
           : {},
     },
     { new: true },
@@ -146,9 +160,9 @@ router.patch("/releasedate/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
     {
-      $set: req.body.releaseDate
+      $set: req.body.details.releaseDate
         ? {
-            "details.releaseDate": new Date(req.body.releaseDate)
+            "details.releaseDate": new Date(req.body.details.releaseDate)
               .toDateString()
               .substr(4),
           }
@@ -169,7 +183,9 @@ router.patch("/genre/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
     {
-      $set: req.body.genre ? { "details.genre": req.body.genre } : {},
+      $set: req.body.details.genre
+        ? { "details.genre": req.body.details.genre }
+        : {},
     },
     { new: true },
     (err, doc) => {
@@ -187,7 +203,23 @@ router.patch("/sealed/:VGId", async (req, res) => {
     { _id: req.params.VGId },
     {
       $set:
-        req.body.sealed !== null ? { "details.sealed": req.body.sealed } : {},
+        req.body.details.sealed !== null
+          ? { "details.sealed": req.body.details.sealed }
+          : {},
+    },
+    { new: true },
+    (err, doc) => {
+      if (err) res.json(err);
+      res.json(doc);
+    }
+  );
+});
+
+router.patch("url/:VGId", async (req, res) => {
+  await Item.findOneAndUpdate(
+    { _id: req.params.VGId },
+    {
+      $set: req.body.imgPath ? { imgPath: req.body.imgPath } : {},
     },
     { new: true },
     (err, doc) => {

@@ -57,8 +57,12 @@ router.get("/:FigId", async (req, res) => {
  *                              *
  *********************************/
 router.post("/", async (req, res) => {
-  const figure = new Figure(req.body);
-  const item = new Item({ type: "Figure", details: figure });
+  const figure = new Figure(req.body.details);
+  const item = new Item({
+    type: "Figure",
+    imgPath: req.body.imgPath,
+    details: figure,
+  });
   try {
     const savedItem = await item.save();
     res.json(savedItem);
@@ -92,7 +96,7 @@ router.delete("/:FigId", async (req, res) => {
 router.patch("/:FigId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.FigId },
-    { $set: req.body ? { details: new Figure(req.body) } : {} },
+    { $set: req.body.details ? { details: new Figure(req.body.details) } : {} },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);
@@ -107,7 +111,11 @@ router.patch("/:FigId", async (req, res) => {
 router.patch("/name/:FigId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.FigId },
-    { $set: req.body.name ? { "details.name": req.body.name } : {} },
+    {
+      $set: req.body.details.name
+        ? { "details.name": req.body.details.name }
+        : {},
+    },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);
@@ -124,8 +132,8 @@ router.patch("/condition/:FigId", async (req, res) => {
     { _id: req.params.FigId },
     {
       $set:
-        req.body.condition !== null
-          ? { "details.condition": req.body.condition }
+        req.body.details.condition !== null
+          ? { "details.condition": req.body.details.condition }
           : {},
     },
     { new: true },
@@ -144,7 +152,9 @@ router.patch("/sealed/:VGId", async (req, res) => {
     { _id: req.params.VGId },
     {
       $set:
-        req.body.sealed !== null ? { "details.sealed": req.body.sealed } : {},
+        req.body.details.sealed !== null
+          ? { "details.sealed": req.body.details.sealed }
+          : {},
     },
     { new: true },
     (err, doc) => {
@@ -162,7 +172,9 @@ router.patch("/series/:FigId", async (req, res) => {
     { _id: req.params.FigId },
     {
       $set:
-        req.body.series !== null ? { "details.series": req.body.series } : {},
+        req.body.details.series !== null
+          ? { "details.series": req.body.details.series }
+          : {},
     },
     { new: true },
     (err, doc) => {
@@ -180,9 +192,23 @@ router.patch("/agerestricted/:FigId", async (req, res) => {
     { _id: req.params.FigId },
     {
       $set:
-        req.body.ageRestricted !== null
-          ? { "details.ageRestricted": req.body.ageRestricted }
+        req.body.details.ageRestricted !== null
+          ? { "details.ageRestricted": req.body.details.ageRestricted }
           : {},
+    },
+    { new: true },
+    (err, doc) => {
+      if (err) res.json(err);
+      res.json(doc);
+    }
+  );
+});
+
+router.patch("url/:FigId", async (req, res) => {
+  await Item.findOneAndUpdate(
+    { _id: req.params.FigId },
+    {
+      $set: req.body.imgPath ? { imgPath: req.body.imgPath } : {},
     },
     { new: true },
     (err, doc) => {

@@ -43,14 +43,16 @@ router.get("/:AnimeId", async (req, res) => {
  *                              *
  *********************************/
 router.post("/", async (req, res) => {
-  const figure = new Anime(req.body);
+  const anime = new Anime(req.body.details);
   //Formats date
   req.body.releaseDate
-    ? (figure.releaseDate = new Date(figure.releaseDate)
-        .toDateString()
-        .substr(4))
+    ? (anime.releaseDate = new Date(anime.releaseDate).toDateString().substr(4))
     : {};
-  const item = new Item({ type: "Anime", details: figure });
+  const item = new Item({
+    type: "Anime",
+    imgPath: req.body.imgPath,
+    details: anime,
+  });
   try {
     const savedItem = await item.save();
     res.json(savedItem);
@@ -84,7 +86,7 @@ router.delete("/:AnimeId", async (req, res) => {
 router.patch("/:AnimeId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.AnimeId },
-    { $set: req.body ? { details: new Anime(req.body) } : {} },
+    { $set: req.body.details ? { details: new Anime(req.body.details) } : {} },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);
@@ -98,8 +100,8 @@ router.patch("/:AnimeId", async (req, res) => {
 //
 router.patch("/name/:AnimeId", async (req, res) => {
   await Item.findOneAndUpdate(
-    { _id: req.params.AnimeId },
-    { $set: req.body.name ? { "details.name": req.body.name } : {} },
+    { _id: req.params.details.AnimeId },
+    { $set: req.body.name ? { "details.name": req.body.details.name } : {} },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);
@@ -116,8 +118,8 @@ router.patch("/publisher/:AnimeId", async (req, res) => {
     { _id: req.params.AnimeId },
     {
       $set:
-        req.body.publisher !== null
-          ? { "details.publisher": req.body.publisher }
+        req.body.details.publisher !== null
+          ? { "details.publisher": req.body.details.publisher }
           : {},
     },
     { new: true },
@@ -135,8 +137,8 @@ router.patch("/media/:AnimeId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.AnimeId },
     {
-      $set: req.body.mediaType
-        ? { "details.mediaType": req.body.mediaType }
+      $set: req.body.details.mediaType
+        ? { "details.mediaType": req.body.details.mediaType }
         : {},
     },
     { new: true },
@@ -154,8 +156,8 @@ router.patch("/limitededition/:AnimeId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.AnimeId },
     {
-      $set: req.body.limitedEdition
-        ? { "details.limitedEdition": req.body.limitedEdition }
+      $set: req.body.details.limitedEdition
+        ? { "details.limitedEdition": req.body.details.limitedEdition }
         : {},
     },
     { new: true },
@@ -174,9 +176,9 @@ router.patch("/releasedate/:AnimeId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.AnimeId },
     {
-      $set: req.body.releaseDate
+      $set: req.body.details.releaseDate
         ? {
-            "details.releaseDate": new Date(req.body.releaseDate)
+            "details.releaseDate": new Date(req.body.details.releaseDate)
               .toDateString()
               .substr(4),
           }
@@ -198,8 +200,8 @@ router.patch("/condition/:AnimeId", async (req, res) => {
     { _id: req.params.AnimeId },
     {
       $set:
-        req.body.condition !== null
-          ? { "details.condition": req.body.condition }
+        req.body.details.condition !== null
+          ? { "details.condition": req.body.details.condition }
           : {},
     },
     { new: true },
@@ -217,7 +219,26 @@ router.patch("/genre/:AnimeId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.AnimeId },
     {
-      $set: req.body.genre ? { "details.genre": req.body.genre } : {},
+      $set: req.body.details.genre
+        ? { "details.genre": req.body.details.genre }
+        : {},
+    },
+    { new: true },
+    (err, doc) => {
+      if (err) res.json(err);
+      res.json(doc);
+    }
+  );
+});
+
+//
+//Update image url
+//
+router.patch("url/:AnimeId", async (req, res) => {
+  await Item.findOneAndUpdate(
+    { _id: req.params.AnimeId },
+    {
+      $set: req.body.imgPath ? { imgPath: req.body.imgPath } : {},
     },
     { new: true },
     (err, doc) => {

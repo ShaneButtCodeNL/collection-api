@@ -4,6 +4,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 //get env
 require("dotenv/config");
+//get cors
+const cors = require("cors");
 
 const app = express();
 mongoose.set("useFindAndModify", false);
@@ -18,7 +20,7 @@ const mangaRoutes = require("./routes/manga");
 const VideoGameRoutes = require("./routes/videoGame");
 const FigureRoutes = require("./routes/figure");
 const AnimeRoutes = require("./routes/anime");
-
+app.use(cors());
 app.use("/", itemRoutes);
 app.use("/manga", mangaRoutes);
 app.use("/videogame", VideoGameRoutes);
