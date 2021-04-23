@@ -12,8 +12,8 @@ const User = require("../models/Owner");
 router.get("/", async (req, res) => {
   try {
     const login = await User.findOne({
-      userName: req.body.userName,
-      password: req.body.password,
+      userName: req.query.userName,
+      password: req.query.password,
     });
     if (!login) {
       console.log("Failed Login attempt.");
