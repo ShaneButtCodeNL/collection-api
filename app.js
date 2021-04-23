@@ -20,12 +20,14 @@ const mangaRoutes = require("./routes/manga");
 const VideoGameRoutes = require("./routes/videoGame");
 const FigureRoutes = require("./routes/figure");
 const AnimeRoutes = require("./routes/anime");
+const LoginRoutes = require("./routes/login");
 app.use(cors());
 app.use("/", itemRoutes);
 app.use("/manga", mangaRoutes);
 app.use("/videogame", VideoGameRoutes);
 app.use("/figure", FigureRoutes);
 app.use("/anime", AnimeRoutes);
+app.use("/login", LoginRoutes);
 
 mongoose.connect(
   process.env.DB_CONNECTION,
