@@ -7,7 +7,7 @@ const AnimeScheme = mongoose.Schema(
     mediaType: { type: String, required: true },
     publisher: String,
     condition: String,
-    releaseDate: Date,
+    releaseDate: String,
     //Genres of the anime such as shonen, magic, ecchi, horror ect
     genres: { type: Array, required: true },
     limitedEdition: Boolean,
