@@ -219,12 +219,12 @@ router.patch("/condition/:AnimeId", async (req, res) => {
 //
 //Update genre
 //
-router.patch("/genre/:AnimeId", async (req, res) => {
+router.patch("/genres/:AnimeId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.AnimeId },
     {
-      $set: req.body.details.genre
-        ? { "details.genre": req.body.details.genre }
+      $set: req.body.details.genres
+        ? { "details.genres": req.body.details.genres }
         : {},
     },
     { new: true },
