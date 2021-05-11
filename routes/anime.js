@@ -17,9 +17,9 @@ const Anime = require("../models/Anime");
 //
 router.get("/", async (req, res) => {
   try {
-    const items = await (await Item.find()).filter(
-      (doc) => doc.type === "Anime"
-    );
+    const items = await (
+      await Item.find()
+    ).filter((doc) => doc.type === "Anime");
     res.json(items);
   } catch (err) {
     res.json(err);
@@ -100,8 +100,12 @@ router.patch("/:AnimeId", async (req, res) => {
 //
 router.patch("/name/:AnimeId", async (req, res) => {
   await Item.findOneAndUpdate(
-    { _id: req.params.details.AnimeId },
-    { $set: req.body.name ? { "details.name": req.body.details.name } : {} },
+    { _id: req.params.AnimeId },
+    {
+      $set: req.body.details.name
+        ? { "details.name": req.body.details.name }
+        : {},
+    },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);
