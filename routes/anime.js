@@ -160,9 +160,10 @@ router.patch("/limitededition/:AnimeId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.AnimeId },
     {
-      $set: req.body.details.limitedEdition
-        ? { "details.limitedEdition": req.body.details.limitedEdition }
-        : {},
+      $set:
+        req.body.details.limitedEdition !== undefined
+          ? { "details.limitedEdition": req.body.details.limitedEdition }
+          : {},
     },
     { new: true },
     (err, doc) => {
