@@ -23,9 +23,9 @@ const compareStrings = (s1, s2) => {
 //
 router.get("/", async (req, res) => {
   try {
-    const items = await (await Item.find()).filter(
-      (doc) => doc.type === "Manga"
-    );
+    const items = await (
+      await Item.find()
+    ).filter((doc) => doc.type === "Manga");
     res.json(items);
   } catch (err) {
     res.json(err);
@@ -197,6 +197,24 @@ router.patch("/author/:MangaId", async (req, res) => {
     (err, doc) => {
       if (err) res.json(err);
       res.json(doc);
+    }
+  );
+});
+
+//
+//Update volume number
+//
+router.patch("/volume/:MangaId", async (req, res) => {
+  await Item.findOneAndUpdate(
+    { _id: req.params.MangaId },
+    {
+      $set: req.body.details.volume
+        ? { "details.volume": req.body.details.volume }
+        : {},
+    },
+    { new: true },
+    (err, doc) => {
+      res.json(err ? err : doc);
     }
   );
 });

@@ -16,9 +16,9 @@ const VideoGame = require("../models/VideoGame");
 //
 router.get("/", async (req, res) => {
   try {
-    const items = await (await Item.find()).filter(
-      (doc) => doc.type === "VideoGame"
-    );
+    const items = await (
+      await Item.find()
+    ).filter((doc) => doc.type === "VideoGame");
     res.json(items);
   } catch (err) {
     res.json(err);
@@ -114,6 +114,25 @@ router.patch("/name/:VGId", async (req, res) => {
 });
 
 //
+//Update publisher
+//
+router.patch("/publisher/:VGId", async (req, res) => {
+  await Item.findOneAndUpdate(
+    { _id: req.params.VGId },
+    {
+      $set: req.body.details.publisher
+        ? { "details.publisher": req.body.details.publisher }
+        : {},
+    },
+    { new: true },
+    (err, doc) => {
+      if (err) res.json(err);
+      res.json(doc);
+    }
+  );
+});
+
+//
 //Update platform
 //
 router.patch("/platform/:VGId", async (req, res) => {
@@ -179,12 +198,12 @@ router.patch("/releasedate/:VGId", async (req, res) => {
 //
 //Update genre
 //
-router.patch("/genre/:VGId", async (req, res) => {
+router.patch("/genres/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
     {
-      $set: req.body.details.genre
-        ? { "details.genre": req.body.details.genre }
+      $set: req.body.details.genres
+        ? { "details.genres": req.body.details.genres }
         : {},
     },
     { new: true },
@@ -211,6 +230,25 @@ router.patch("/sealed/:VGId", async (req, res) => {
     (err, doc) => {
       if (err) res.json(err);
       res.json(doc);
+    }
+  );
+});
+
+//
+//Update if has a case
+//
+router.patch("/hascase/:VGId", async (req, res) => {
+  await Item.findOneAndUpdate(
+    { _id: req.params.VGId },
+    {
+      $set:
+        req.body.details.hasCase !== undefined
+          ? { "details.hasCase": req.body.details.hasCase }
+          : {},
+    },
+    { new: true },
+    (err, doc) => {
+      res.json(err ? err : doc);
     }
   );
 });

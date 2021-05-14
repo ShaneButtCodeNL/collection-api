@@ -17,9 +17,9 @@ const Figure = require("../models/Figure");
 //
 router.get("/", async (req, res) => {
   try {
-    const items = await (await Item.find()).filter(
-      (doc) => doc.type === "Figure"
-    );
+    const items = await (
+      await Item.find()
+    ).filter((doc) => doc.type === "Figure");
     res.json(items);
   } catch (err) {
     res.json(err);
@@ -31,7 +31,9 @@ router.get("/", async (req, res) => {
 //
 router.get("/restricted", async (req, res) => {
   try {
-    const items = await (await Item.find()).filter(
+    const items = await (
+      await Item.find()
+    ).filter(
       (doc) => doc.type === "Figure" && doc.details.ageRestricted === false
     );
     res.json(items);
@@ -125,6 +127,44 @@ router.patch("/name/:FigId", async (req, res) => {
 });
 
 //
+//Update Type
+//
+router.patch("/type/:FigId", async (req, res) => {
+  await Item.findOneAndUpdate(
+    { _id: req.params.FigId },
+    {
+      $set: req.body.details.type
+        ? { "details.type": req.body.details.type }
+        : {},
+    },
+    { new: true },
+    (err, doc) => {
+      if (err) res.json(err);
+      res.json(doc);
+    }
+  );
+});
+
+//
+//Update From
+//
+router.patch("/from/:FigId", async (req, res) => {
+  await Item.findOneAndUpdate(
+    { _id: req.params.FigId },
+    {
+      $set: req.body.details.from
+        ? { "details.from": req.body.details.from }
+        : {},
+    },
+    { new: true },
+    (err, doc) => {
+      if (err) res.json(err);
+      res.json(doc);
+    }
+  );
+});
+
+//
 //Update condition
 //
 router.patch("/condition/:FigId", async (req, res) => {
@@ -192,7 +232,7 @@ router.patch("/agerestricted/:FigId", async (req, res) => {
     { _id: req.params.FigId },
     {
       $set:
-        req.body.details.ageRestricted !== null
+        req.body.details.ageRestricted !== undefined
           ? { "details.ageRestricted": req.body.details.ageRestricted }
           : {},
     },
