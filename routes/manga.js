@@ -219,7 +219,7 @@ router.patch("/volume/:MangaId", async (req, res) => {
   );
 });
 
-router.patch("url/:MangaId", async (req, res) => {
+router.patch("/imagepath/:MangaId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.MangaId },
     {

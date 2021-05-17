@@ -244,7 +244,7 @@ router.patch("/agerestricted/:FigId", async (req, res) => {
   );
 });
 
-router.patch("url/:FigId", async (req, res) => {
+router.patch("/imagepath/:FigId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.FigId },
     {

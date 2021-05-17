@@ -239,11 +239,12 @@ router.patch("/genres/:AnimeId", async (req, res) => {
 //
 //Update image url
 //
-router.patch("url/:AnimeId", async (req, res) => {
+router.patch("/imagepath/:AnimeId", async (req, res) => {
+  console.log(req.params.AnimeId, "/n", req.body);
   await Item.findOneAndUpdate(
     { _id: req.params.AnimeId },
     {
-      $set: req.body.imgPath ? { imgPath: req.body.imgPath } : {},
+      $set: req.body.imgPath !== undefined ? { imgPath: req.body.imgPath } : {},
     },
     { new: true },
     (err, doc) => {

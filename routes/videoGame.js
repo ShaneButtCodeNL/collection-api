@@ -253,7 +253,7 @@ router.patch("/hascase/:VGId", async (req, res) => {
   );
 });
 
-router.patch("url/:VGId", async (req, res) => {
+router.patch("/imagepath/:VGId", async (req, res) => {
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
     {
