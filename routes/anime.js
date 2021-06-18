@@ -5,6 +5,7 @@ const router = express.Router();
 //Schema
 const Item = require("../models/CollectionItem");
 const Anime = require("../models/Anime");
+const { rawListeners } = require("../models/CollectionItem");
 
 //Routes
 /*****************************
@@ -84,9 +85,14 @@ router.delete("/:AnimeId", async (req, res) => {
 //Update all details
 //
 router.patch("/:AnimeId", async (req, res) => {
+  let newDetails = { ...req.body.details };
+  if (newDetails.releaseDate !== undefined) {
+    let date = new Date(newDetails.releaseDate).toDateString().substr(4);
+    newDetails.releaseDate = date;
+  }
   await Item.findOneAndUpdate(
     { _id: req.params.AnimeId },
-    { $set: req.body.details ? { details: new Anime(req.body.details) } : {} },
+    { $set: req.body.details ? { details: new Anime(newDetails) } : {} },
     { new: true },
     (err, doc) => {
       if (err) res.json(err);

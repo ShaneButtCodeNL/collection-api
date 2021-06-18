@@ -79,12 +79,15 @@ router.delete("/:VGId", async (req, res) => {
 //Update all details
 //
 router.patch("/:VGId", async (req, res) => {
+  let newDetails = { ...req.body.details };
+  if (newDetails.releaseDate !== undefined) {
+    let date = new Date(newDetails.releaseDate).toDateString().substr(4);
+    newDetails.releaseDate = date;
+  }
   await Item.findOneAndUpdate(
     { _id: req.params.VGId },
     {
-      $set: req.body.details
-        ? { details: new VideoGame(req.body.details) }
-        : {},
+      $set: req.body.details ? { details: new VideoGame(newDetails) } : {},
     },
     { new: true },
     (err, doc) => {
